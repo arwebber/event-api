@@ -6,7 +6,7 @@ const db = require('../db/database');
  * Get the cart by session id.
  */
 router.get('/v1', async function (req, res) {
-  const { sessionId } = req.body;
+  const sessionId = req.query.sessionId;
 
   if (sessionId == null) {
     res.status(400).send('Session ID cannot be null.');
@@ -26,7 +26,7 @@ router.get('/v1', async function (req, res) {
  * Get the cart contents by the cart ID.
  */
 router.get('/v1/contents/by/id', async function (req, res) {
-  const { cartId } = req.body;
+  const cartId = req.query.cartId;
 
   if (cartId == null) {
     res.status(400).send('Cart ID cannot be null.');
@@ -53,7 +53,7 @@ router.get('/v1/contents/by/session', async function (
   req,
   res
 ) {
-  const { sessionId } = req.body;
+  const sessionId = req.query.sessionId;
 
   if (sessionId == null) {
     res.status(400).send('Session ID cannot be null.');

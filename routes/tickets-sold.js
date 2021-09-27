@@ -6,7 +6,7 @@ const db = require('../db/database');
  * Get number of sold tickets for an event.
  */
 router.get('/v1/tickets/event', async function (req, res) {
-    const { eventId } = req.body;
+    const eventId = req.query.eventId;
 
     if (eventId == null) {
         res.status(400).send('Event ID cannot be null.');
@@ -26,7 +26,7 @@ router.get('/v1/tickets/event', async function (req, res) {
  * Get number of sold tickets for an event session.
  */
 router.get('/v1/tickets/event/session', async function (req, res) {
-    const { eventSessionId } = req.body;
+    const eventSessionId = req.query.eventId;
 
     if (eventSessionId == null) {
         res.status(400).send('Event Session ID cannot be null.');

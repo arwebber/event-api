@@ -6,7 +6,7 @@ const db = require('../db/database');
  * Get an event by the ID.
  */
 router.get('/v1', async function (req, res) {
-  const { eventId } = req.body;
+  const eventId = req.query.eventId;
 
   if (eventId == null) {
     res.status(400).send('Event ID cannot be null.');
