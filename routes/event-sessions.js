@@ -5,10 +5,17 @@ const db = require('../db/database');
 /**
  * Get the event session details by an ID.
  */
-router.get('/v1/:eventId', async function (req, res) {
+router.get('/v1', async function (req, res) {
+  const { eventId } = req.body;
+
+  if (eventId == null) {
+    res.status(400).send('Event ID cannot be null.');
+    return false;
+  }
+
   try {
     const sqlQuery = 'SELECT * FROM EVENT_SESSION WHERE event_id=?';
-    const rows = await db.query(sqlQuery, req.params.eventId);
+    const rows = await db.query(sqlQuery, eventId);
     res.status(200).json(rows);
   } catch (error) {
     res.status(400).send(error.message);
@@ -18,9 +25,8 @@ router.get('/v1/:eventId', async function (req, res) {
 /**
  * Add an event session.
  */
-router.post('/v1/addEventSession', async function (req, res) {
+router.post('/v1/add/event/session', async function (req, res) {
   try {
-    console.log('req', req.body);
     const {
       event_id,
       description,
