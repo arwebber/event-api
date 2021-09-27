@@ -7,7 +7,7 @@ const db = require('../db/database');
  */
 router.get('/v1/view/:eventId', async function (req, res) {
   try {
-    const sqlQuery = 'SELECT * FROM EVENT WHERE eventId=?';
+    const sqlQuery = 'SELECT * FROM EVENT WHERE event_id=?';
     const rows = await db.query(sqlQuery, req.params.eventId);
     res.status(200).json(rows);
   } catch (error) {

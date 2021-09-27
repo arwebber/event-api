@@ -5,5 +5,5 @@ CREATE TABLE `s4ofvm3lvcnodbsy`.`EVENT` (
   `status` VARCHAR(45) NOT NULL,
   `start_date_time` DATETIME NOT NULL,
   `end_date_time` DATETIME NOT NULL,
-  `banner_image` VARCHAR(45) NULL,
+  `banner_image` VARCHAR(500) NULL,
   PRIMARY KEY (`event_id`));
