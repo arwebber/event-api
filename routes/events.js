@@ -5,10 +5,17 @@ const db = require('../db/database');
 /**
  * Get an event by the ID.
  */
-router.get('/v1/view/:eventId', async function (req, res) {
+router.get('/v1', async function (req, res) {
+  const { eventId } = req.body;
+
+  if (eventId == null) {
+    res.status(400).send('Event ID cannot be null.');
+    return false;
+  }
+
   try {
     const sqlQuery = 'SELECT * FROM EVENT WHERE event_id=?';
-    const rows = await db.query(sqlQuery, req.params.eventId);
+    const rows = await db.query(sqlQuery, eventId);
     res.status(200).json(rows);
   } catch (error) {
     res.status(400).send(error.message);
@@ -31,9 +38,8 @@ router.get('/v1/all', async function (req, res) {
 /**
  * Add an event.
  */
-router.post('/v1/addEvent', async function (req, res) {
+router.post('/v1/add/event', async function (req, res) {
   try {
-    console.log('req', req.body);
     const {
       title,
       description,
@@ -43,7 +49,8 @@ router.post('/v1/addEvent', async function (req, res) {
       banner_image
     } = req.body;
     const sqlQuery =
-      'INSERT INTO EVENT (title, description, status, start_date_time, end_date_time, banner_image) VALUES (?, ?, ?, ?, ?, ?)';
+      'INSERT INTO EVENT (title, description, status, start_date_time, end_date_time, banner_image) ' +
+      'VALUES (?, ?, ?, ?, ?, ?)';
     const result = await db.query(sqlQuery, [
       title,
       description,
