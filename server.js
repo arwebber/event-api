@@ -25,6 +25,7 @@ app.use(function (req, res, next) {
 const eventsRouter = require('./routes/events.js');
 const eventSessionsRouter = require('./routes/event-sessions.js');
 const cartRouter = require('./routes/cart.js');
+const ticketsSoldRouter = require('./routes/tickets-sold.js');
 
 /**
  * Assign routes for the events application.
@@ -32,6 +33,7 @@ const cartRouter = require('./routes/cart.js');
 app.use('/api/events', eventsRouter);
 app.use('/api/event-sessions', eventSessionsRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/sold', ticketsSoldRouter);
 
 /**
  * Start listening.
