@@ -16,7 +16,17 @@ router.get('/v1', async function (req, res) {
   try {
     const sqlQuery = 'SELECT * FROM CART WHERE session_id=?';
     const rows = await db.query(sqlQuery, sessionId);
-    res.status(200).json(rows);
+
+    if (rows.length > 1) {
+      res.status(200).send("Too many carts. Please clear cookies");
+      return false;
+    } else if (rows.length == 0) {
+      res.status(200).json(0);
+    } else {
+      res.status(200).json(rows[0].cart_id);
+    }
+
+    // res.status(200).json(rows);
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -77,6 +87,41 @@ router.get('/v1/contents/by/session', async function (
 });
 
 /**
+ * Get the cart contents by the user session id.
+ */
+router.get('/v1/contents/total/', async function (
+  req,
+  res
+) {
+  const sessionId = req.query.sessionId;
+
+  if (sessionId == null) {
+    res.status(400).send('Session ID cannot be null.');
+    return false;
+  }
+
+  try {
+    const sqlQuery =
+      'SELECT SUM(ci.quantity*es.price) as subtotal ' +
+      'FROM CART_ITEM ci ' +
+      'JOIN CART c ON ci.cart_id=c.cart_id ' +
+      'JOIN EVENT_SESSION es ON ci.event_session_id=es.event_session_id ' +
+      'WHERE c.session_id=?';
+    const rows = await db.query(sqlQuery, [
+      sessionId,
+    ]);
+    if (rows.length == 1) {
+      res.status(200).json({ subtotal: rows[0].subtotal });
+    } else {
+      res.status(200).json(rows);
+    }
+
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+/**
  * Create a cart. Used when a client begins the checkout process.
  */
 router.post('/v1/add/cart', async function (req, res) {
@@ -84,7 +129,7 @@ router.post('/v1/add/cart', async function (req, res) {
     const { session_id } = req.body;
     const sqlQuery = 'INSERT INTO CART (session_id) VALUES (?)';
     const result = await db.query(sqlQuery, [session_id]);
-    res.status(200).json({ cart_id: result.insertId });
+    res.status(200).json(result.insertId);
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -102,6 +147,23 @@ router.post('/v1/add/cart/item', async function (req, res) {
       cart_id,
       event_session_id,
       quantity
+    ]);
+    res.status(200).json({ cart_item_id: result.insertId });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+/**
+ * Delete an item from the cart.
+ */
+router.delete('/v1/delete/cart/item', async function (req, res) {
+  try {
+    const { cart_item_id } = req.body;
+    const sqlQuery =
+      'DELETE FROM CART_ITEM WHERE cart_item_id=?';
+    const result = await db.query(sqlQuery, [
+      cart_item_id,
     ]);
     res.status(200).json({ cart_item_id: result.insertId });
   } catch (error) {
