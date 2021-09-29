@@ -1,4 +1,8 @@
 const express = require('express');
+const bodyParser = require("body-parser");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 const PORT = process.env.PORT || '3001';
@@ -34,6 +38,43 @@ app.use('/api/events', eventsRouter);
 app.use('/api/event-sessions', eventSessionsRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/sold', ticketsSoldRouter);
+
+/**
+ * Swagger doc options
+ */
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Event Checkout Site Express API with Swagger",
+      version: "0.1.0",
+      description:
+        "The documentation for the Event Checkout Site's Express API with Swagger",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "Andrew Webber",
+        url: "https://webber-event-checkout.herokuapp.com/",
+        email: "webber.andrewr@gmail.com",
+      },
+    },
+    servers: [
+      {
+        url: "https://event-checkout-api.herokuapp.com/",
+      },
+    ],
+  },
+  apis: ["./routes/cart.js"],
+};
+
+const specs = swaggerJsdoc(options);
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs)
+);
 
 /**
  * Start listening.
