@@ -28,7 +28,7 @@ router.get('/v1', async function (req, res) {
 
     // res.status(200).json(rows);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -52,7 +52,7 @@ router.get('/v1/contents/by/id', async function (req, res) {
     const rows = await db.query(sqlQuery, cartId);
     res.status(200).json(rows);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -82,7 +82,7 @@ router.get('/v1/contents/by/session', async function (
     ]);
     res.status(200).json(rows);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -117,7 +117,7 @@ router.get('/v1/contents/total/', async function (
     }
 
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -131,7 +131,7 @@ router.post('/v1/add/cart', async function (req, res) {
     const result = await db.query(sqlQuery, [session_id]);
     res.status(200).json(result.insertId);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -175,7 +175,7 @@ router.post('/v1/add/cart/item', async function (req, res) {
     ]);
     res.status(200).json({ cart_item_id: result.insertId });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -192,7 +192,7 @@ router.delete('/v1/delete/cart/item', async function (req, res) {
     ]);
     res.status(200).json({ cart_item_id: result.insertId });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -214,7 +214,7 @@ router.delete('/v1/delete/cart/', async function (req, res) {
     ]);
     res.status(200).json({ cart_id: result.insertId });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 

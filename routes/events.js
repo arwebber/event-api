@@ -18,7 +18,7 @@ router.get('/v1', async function (req, res) {
     const rows = await db.query(sqlQuery, eventId);
     res.status(200).json(rows);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -31,7 +31,7 @@ router.get('/v1/all', async function (req, res) {
     const rows = await db.query(sqlQuery, req.params.eventId);
     res.status(200).json(rows);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -61,7 +61,7 @@ router.post('/v1/add/event', async function (req, res) {
     ]);
     res.status(200).json({ cart_item_id: result.insertId });
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
