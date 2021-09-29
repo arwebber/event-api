@@ -141,12 +141,37 @@ router.post('/v1/add/cart', async function (req, res) {
 router.post('/v1/add/cart/item', async function (req, res) {
   try {
     const { cart_id, event_session_id, quantity } = req.body;
-    const sqlQuery =
-      'INSERT INTO CART_ITEM (cart_id, event_session_id, quantity) VALUES (?, ?, ?)';
-    const result = await db.query(sqlQuery, [
+
+    /*
+     * Check if the cart item already exists, if so we update the quantity instead of adding
+     * another record.
+     */
+    const sqlQueryCheck = 'SELECT * FROM CART_ITEM WHERE cart_id=? AND event_session_id=?';
+    const rows = await db.query(sqlQueryCheck, [
       cart_id,
+      event_session_id
+    ]);
+
+    let sqlQuery = ''
+    if (rows.length == 1) {
+      if (quantity == 0) {
+        sqlQuery = 'DELETE FROM CART_ITEM WHERE cart_item_id=?';
+        const resultDelete = await db.query(sqlQuery, [
+          rows[0].cart_item_id
+        ]);
+        res.status(200).json('Quantity 0, item deleted.');
+        return true;
+      } else {
+        sqlQuery = 'UPDATE CART_ITEM SET quantity=? WHERE event_session_id=? AND cart_id=?';
+      }
+    } else {
+      sqlQuery = 'INSERT INTO CART_ITEM (quantity, event_session_id, cart_id) VALUES (?, ?, ?)';
+    }
+
+    const result = await db.query(sqlQuery, [
+      quantity,
       event_session_id,
-      quantity
+      cart_id
     ]);
     res.status(200).json({ cart_item_id: result.insertId });
   } catch (error) {
@@ -170,5 +195,29 @@ router.delete('/v1/delete/cart/item', async function (req, res) {
     res.status(400).send(error.message);
   }
 });
+
+/**
+ * Delete an item from the cart.
+ */
+router.delete('/v1/delete/cart/', async function (req, res) {
+  try {
+    const { cart_id } = req.body;
+    const sqlDeleteCartItemsQuery =
+      'DELETE FROM CART_ITEMS WHERE cart_id=?';
+    const sqlDeleteCartQuery =
+      'DELETE FROM CART WHERE cart_id=?';
+    const deleteCartItemsResult = await db.query(sqlDeleteCartItemsQuery, [
+      cart_id,
+    ]);
+    const result = await db.query(sqlDeleteCartQuery, [
+      cart_id,
+    ]);
+    res.status(200).json({ cart_id: result.insertId });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+
 
 module.exports = router;
