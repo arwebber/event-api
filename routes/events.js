@@ -27,7 +27,7 @@ router.get('/v1', async function (req, res) {
  */
 router.get('/v1/all', async function (req, res) {
   try {
-    const sqlQuery = 'SELECT * FROM EVENT';
+    const sqlQuery = 'SELECT * FROM EVENT ORDER BY start_date_time ASC';
     const rows = await db.query(sqlQuery, req.params.eventId);
     res.status(200).json(rows);
   } catch (error) {
@@ -60,6 +60,37 @@ router.post('/v1/add/event', async function (req, res) {
       banner_image
     ]);
     res.status(200).json({ cart_item_id: result.insertId });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+/**
+ * Update an event.
+ */
+router.post('/v1/update/event', async function (req, res) {
+  try {
+    const {
+      event_id,
+      title,
+      description,
+      status,
+      start_date_time,
+      end_date_time,
+      banner_image
+    } = req.body;
+    const sqlQuery =
+      'UPDATE EVENT SET title=?, description=?, status=?, start_date_time=?, end_date_time=?, banner_image=? WHERE event_id=?';
+    const result = await db.query(sqlQuery, [
+      title,
+      description,
+      status,
+      start_date_time,
+      end_date_time,
+      banner_image,
+      event_id,
+    ]);
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -45,10 +45,11 @@ router.get('/v1/contents/by/id', async function (req, res) {
 
   try {
     const sqlQuery =
-      'SELECT ci.*, es.event_id, es.title, es.price ' +
+      'SELECT ci.*, es.event_id, es.title, es.price, e.title as event_title ' +
       'FROM CART_ITEM ci ' +
       'JOIN EVENT_SESSION es ON ci.event_session_id=es.event_session_id ' +
-      'WHERE cart_id=?';
+      'JOIN EVENT e ON es.event_id=e.event_id ' +
+      'WHERE cart_id=? ORDER BY es.event_id ASC';
     const rows = await db.query(sqlQuery, cartId);
     res.status(200).json(rows);
   } catch (error) {
@@ -72,11 +73,12 @@ router.get('/v1/contents/by/session', async function (
 
   try {
     const sqlQuery =
-      'SELECT ci.*, es.event_id, es.title, es.price ' +
+      'SELECT ci.*, es.event_id, es.title, es.price, e.title as event_title ' +
       'FROM CART_ITEM ci ' +
       'JOIN CART c ON ci.cart_id=c.cart_id ' +
       'JOIN EVENT_SESSION es ON ci.event_session_id=es.event_session_id ' +
-      'WHERE c.session_id=?';
+      'JOIN EVENT e ON es.event_id=e.event_id ' +
+      'WHERE c.session_id=? ORDER BY es.event_id ASC';
     const rows = await db.query(sqlQuery, [
       sessionId,
     ]);

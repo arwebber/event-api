@@ -14,7 +14,7 @@ router.get('/v1', async function (req, res) {
   }
 
   try {
-    const sqlQuery = 'SELECT * FROM EVENT_SESSION WHERE event_id=?';
+    const sqlQuery = 'SELECT * FROM EVENT_SESSION WHERE event_id=? ORDER BY price ASC';
     const rows = await db.query(sqlQuery, eventId);
     res.status(200).json(rows);
   } catch (error) {
@@ -35,11 +35,10 @@ router.post('/v1/add/event/session', async function (req, res) {
       price,
       sale,
       sale_end_date_time,
-      quantity_remaining,
       total_quantity
     } = req.body;
     const sqlQuery =
-      'INSERT INTO EVENT_SESSION (event_id, description, title, type, price, sale, sale_end_date_time, quantity_remaining, total_quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      'INSERT INTO EVENT_SESSION (event_id, description, title, type, price, sale, sale_end_date_time, total_quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const result = await db.query(sqlQuery, [
       event_id,
       description,
@@ -48,7 +47,6 @@ router.post('/v1/add/event/session', async function (req, res) {
       price,
       sale,
       sale_end_date_time,
-      quantity_remaining,
       total_quantity
     ]);
     res.status(200).json({ event_session_id: result.insertId });
