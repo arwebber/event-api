@@ -126,7 +126,7 @@ router.post('/v1/add/tickets/sold', async function (req, res) {
             const sqlQuery =
                 'INSERT INTO TICKETS_SOLD (event_session_id, quantity, first_name, last_name, email, phone, company) ' +
                 'VALUES (?, ?, ?, ?, ?, ?, ?)';
-            const result = await db.query(sqlQuery, [ticket.cartItem.event_session_id, ticket.cartItem.quantity, ticket.firstName, ticket.lastName, ticket.email, ticket.phone, ticket.company]);
+            const result = await db.query(sqlQuery, [ticket.cartItem.event_session_id, 1, ticket.firstName, ticket.lastName, ticket.email, ticket.phone, ticket.company]);
         });
 
         tickets.forEach(async ticket => {
