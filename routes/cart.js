@@ -226,7 +226,7 @@ router.post('/v1/add/cart', async function (req, res) {
   try {
     const { session_id } = req.body;
 
-    if (sessionId == null) {
+    if (session_id == null) {
       res.status(400).send('Session ID cannot be null.');
       return false;
     }
@@ -240,33 +240,33 @@ router.post('/v1/add/cart', async function (req, res) {
 });
 
 /**
-* @swagger
-* /api/cart/v1/add/cart/item:
-*   post:
-*     description: Add an item to the cart. If the item is already in the cart, update the quantity with the quantity provided.
-*     tags: [Cart]
-*     requestBody:
-*       description: JSON request object that includes the values for the var.
-*       required: true
-*       content:
-*         application/json:
-*           schema:
-*             type: object
-*             properties:
-*               cart_id:
-*                 type: int
-*               event_session_id:
-*                 type: int
-*               quantity:
-*                 type: int
-*     responses:
-*       200:
-*         description: Returns the unique ID of the cart item.
-*       400:
-*         description: Null values not allowed.
-*       503:
-*         description: Error Executing query - see returned message.
-*/
+ * @swagger
+ * /api/cart/v1/add/cart/item:
+ *   post:
+ *     description: Add an item to the cart. If the item is already in the cart, update the quantity with the quantity provided.
+ *     tags: [Cart]
+ *     requestBody:
+ *       description: JSON request object that includes the values for the var.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               cart_id:
+ *                 type: integer
+ *               event_session_id:
+ *                 type: integer
+ *               quantity:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Returns the unique ID of the cart item.
+ *       400:
+ *         description: Null values not allowed.
+ *       503:
+ *         description: Error Executing query - see returned message.
+ */
 router.post('/v1/add/cart/item', async function (req, res) {
   try {
     const { cart_id, event_session_id, quantity } = req.body;
@@ -317,29 +317,29 @@ router.post('/v1/add/cart/item', async function (req, res) {
 });
 
 /**
-* @swagger
-* /api/cart/v1/delete/cart/item:
-*   delete:
-*     description: Deletes and item from the cart. Either if user selects 0 for quantity or if the user deletes from cart.
-*     tags: [Cart]
-*     requestBody:
-*       description: JSON request object that includes the unique cart item ID.
-*       required: true
-*       content:
-*         application/json:
-*           schema:
-*             type: object
-*             properties:
-*               cart_item_id:
-*                 type: int
-*     responses:
-*       200:
-*         description: Returns the unique ID of the cart item that was deleted.
-*       400:
-*         description: Cart Item ID cannot be null.
-*       503:
-*         description: Error Executing query - see returned message.
-*/
+ * @swagger
+ * /api/cart/v1/delete/cart/item:
+ *   delete:
+ *     description: Deletes and item from the cart. Either if user selects 0 for quantity or if the user deletes from cart.
+ *     tags: [Cart]
+ *     requestBody:
+ *       description: JSON request object that includes the unique cart item ID.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               cart_item_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Returns the unique ID of the cart item that was deleted.
+ *       400:
+ *         description: Cart Item ID cannot be null.
+ *       503:
+ *         description: Error Executing query - see returned message.
+ */
 router.delete('/v1/delete/cart/item', async function (req, res) {
   try {
     const { cart_item_id } = req.body;
@@ -382,7 +382,7 @@ router.delete('/v1/delete/cart/item', async function (req, res) {
  *             type: object
  *             properties:
  *               cart_id:
- *                 type: int
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Returns the unique ID of the cart item that was deleted.

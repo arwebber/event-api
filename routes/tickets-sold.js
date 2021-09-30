@@ -3,7 +3,31 @@ const router = express.Router();
 const db = require('../db/database');
 
 /**
- * Get number of sold tickets for an event.
+ * @swagger
+ * tags:
+ *  name: Tickets Sold
+ *  description: API to manage the event tickets sold.
+ */
+
+/**
+ * @swagger
+ * /api/sold/v1/tickets/event:
+ *   get:
+ *     description: Get number of sold tickets for an event.
+ *     tags: [Tickets Sold]
+ *     parameters:
+ *       - name: eventId
+ *         description: The unique event ID.
+ *         in: query
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Returns total number of tickets sold for an entire event.
+ *       400:
+ *         description: Event ID cannot be null.
+ *       503:
+ *         description: Error Executing query - see returned message.
  */
 router.get('/v1/tickets/event', async function (req, res) {
     const eventId = req.query.eventId;
@@ -18,12 +42,30 @@ router.get('/v1/tickets/event', async function (req, res) {
         const rows = await db.query(sqlQuery, eventId);
         res.status(200).json(rows);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(503).json({ error: error.message });
     }
 });
 
+
 /**
- * Get number of sold tickets for an event session.
+ * @swagger
+ * /api/sold/v1/tickets/event/session:
+ *   get:
+ *     description: Get number of sold tickets for an event session.
+ *     tags: [Tickets Sold]
+ *     parameters:
+ *       - name: eventSessionId
+ *         description: The unique event session ID.
+ *         in: query
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Returns total number of tickets sold for an entire event.
+ *       400:
+ *         description: Event ID cannot be null.
+ *       503:
+ *         description: Error Executing query - see returned message.
  */
 router.get('/v1/tickets/event/session', async function (req, res) {
     const eventSessionId = req.query.eventSessionId;
@@ -43,8 +85,31 @@ router.get('/v1/tickets/event/session', async function (req, res) {
 });
 
 /**
- * Add an event session.
- * 
+ * @swagger
+ * /api/cart/v1/add/tickets/sold:
+ *   post:
+ *     description: Add tickets to sold database after user completes checkout process.
+ *     tags: [Tickets Sold]
+ *     requestBody:
+ *       description: JSON request that includes the session ID.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tickets:
+ *                 type: object
+ *                 properties:
+ *                   event_id:
+ *                     type: integer
+ *     responses:
+ *       200:
+ *         description: Returns a success message if executed without error.
+ *       400:
+ *         description: Tickets cannot be null or empty.
+ *       503:
+ *         description: Error Executing query - see returned message.
  */
 router.post('/v1/add/tickets/sold', async function (req, res) {
     try {
@@ -52,10 +117,8 @@ router.post('/v1/add/tickets/sold', async function (req, res) {
             tickets
         } = req.body;
 
-        console.log(tickets)
-
         if (!tickets || tickets.length == 0) {
-            res.status(503).json({ error: 'Tickets cannot be null or empty.' });
+            res.status(400).json({ error: 'Tickets cannot be null or empty.' });
             return false;
         }
 
@@ -75,9 +138,9 @@ router.post('/v1/add/tickets/sold', async function (req, res) {
         const sqlQuery = 'DELETE FROM CART WHERE cart_id = ?';
         const result = await db.query(sqlQuery, tickets[0].cartItem.cart_id);
 
-        res.status(200).json();
+        res.status(200).json({ success: 'Added successfully' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(503).json({ error: error.message });
     }
 });
 
