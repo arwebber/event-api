@@ -92,9 +92,11 @@ router.get('/v1/all', async function (req, res) {
  *               status:
  *                 type: string
  *               start_date_time:
- *                 type: datetime
+ *                 type: string
+ *                 format: date-time
  *               end_date_time:
- *                 type: datetime
+ *                 type: string
+ *                 format: date-time
  *               banner_image:
  *                 type: string
  *     responses:
@@ -165,9 +167,11 @@ router.post('/v1/add/event', async function (req, res) {
  *               status:
  *                 type: string
  *               start_date_time:
- *                 type: datetime
+ *                 type: string
+ *                 format: date-time
  *               end_date_time:
- *                 type: datetime
+ *                 type: string
+ *                 format: date-time
  *               banner_image:
  *                 type: string
  *     responses:

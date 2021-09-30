@@ -48,25 +48,25 @@ router.get('/v1/tickets/event', async function (req, res) {
 
 
 /**
-* @swagger
-* /api/sold/v1/tickets/event/session:
-*   get:
-*     description: Get number of sold tickets for an event session.
-*     tags: [Tickets Sold]
-*     parameters:
-*       - name: eventId
-*         description: The unique event ID.
-*         in: query
-*         required: true
-*         type: integer
-*     responses:
-*       200:
-*         description: Returns total number of tickets sold for an entire event.
-*       400:
-*         description: Event ID cannot be null.
-*       503:
-*         description: Error Executing query - see returned message.
-*/
+ * @swagger
+ * /api/sold/v1/tickets/event/session:
+ *   get:
+ *     description: Get number of sold tickets for an event session.
+ *     tags: [Tickets Sold]
+ *     parameters:
+ *       - name: eventSessionId
+ *         description: The unique event session ID.
+ *         in: query
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: Returns total number of tickets sold for an entire event.
+ *       400:
+ *         description: Event ID cannot be null.
+ *       503:
+ *         description: Error Executing query - see returned message.
+ */
 router.get('/v1/tickets/event/session', async function (req, res) {
     const eventSessionId = req.query.eventSessionId;
 

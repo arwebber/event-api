@@ -317,29 +317,29 @@ router.post('/v1/add/cart/item', async function (req, res) {
 });
 
 /**
-* @swagger
-* /api/cart/v1/delete/cart/item:
-*   delete:
-*     description: Deletes and item from the cart. Either if user selects 0 for quantity or if the user deletes from cart.
-*     tags: [Cart]
-*     requestBody:
-*       description: JSON request object that includes the unique cart item ID.
-*       required: true
-*       content:
-*         application/json:
-*           schema:
-*             type: object
-*             properties:
-*               cart_item_id:
-*                 type: integer
-*     responses:
-*       200:
-*         description: Returns the unique ID of the cart item that was deleted.
-*       400:
-*         description: Cart Item ID cannot be null.
-*       503:
-*         description: Error Executing query - see returned message.
-*/
+ * @swagger
+ * /api/cart/v1/delete/cart/item:
+ *   delete:
+ *     description: Deletes and item from the cart. Either if user selects 0 for quantity or if the user deletes from cart.
+ *     tags: [Cart]
+ *     requestBody:
+ *       description: JSON request object that includes the unique cart item ID.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               cart_item_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Returns the unique ID of the cart item that was deleted.
+ *       400:
+ *         description: Cart Item ID cannot be null.
+ *       503:
+ *         description: Error Executing query - see returned message.
+ */
 router.delete('/v1/delete/cart/item', async function (req, res) {
   try {
     const { cart_item_id } = req.body;
