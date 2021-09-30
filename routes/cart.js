@@ -226,7 +226,7 @@ router.post('/v1/add/cart', async function (req, res) {
   try {
     const { session_id } = req.body;
 
-    if (sessionId == null) {
+    if (session_id == null) {
       res.status(400).send('Session ID cannot be null.');
       return false;
     }
@@ -235,6 +235,7 @@ router.post('/v1/add/cart', async function (req, res) {
     const result = await db.query(sqlQuery, [session_id]);
     res.status(200).json(result.insertId);
   } catch (error) {
+    console.log('error', error)
     res.status(503).json({ error: error.message });
   }
 });
