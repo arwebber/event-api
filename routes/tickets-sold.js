@@ -135,8 +135,11 @@ router.post('/v1/add/tickets/sold', async function (req, res) {
             const result = await db.query(sqlQuery, ticket.cartItem.cart_item_id);
         });
 
-        const sqlQuery = 'DELETE FROM CART WHERE cart_id = ?';
-        const result = await db.query(sqlQuery, tickets[0].cartItem.cart_id);
+        // Timeout to allow deleted items to be removed before removing cart
+        setTimeout(() => {
+            const sqlQuery = 'DELETE FROM CART WHERE cart_id = ?';
+            const result = db.query(sqlQuery, tickets[0].cartItem.cart_id);
+        }, 5000);
 
         res.status(200).json({ success: 'Added successfully' });
     } catch (error) {
